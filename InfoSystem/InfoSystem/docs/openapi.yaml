@@ -1,0 +1,68 @@
+openapi: 3.0.3
+info:
+  title: InfoSystem API
+  version: 1.0.0
+  description: |
+    REST API for the InfoSystem application. Provides endpoints for a welcome message and sending emails.
+servers:
+  - url: http://localhost:8080
+paths:
+  /welcome:
+    get:
+      summary: Welcome message
+      operationId: getWelcome
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: This is welcome page for emailsend
+  /sendemail:
+    post:
+      summary: Send email
+      operationId: postSendEmail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailRequest'
+            examples:
+              default:
+                value:
+                  message: Hello there
+                  subject: Greetings
+                  to: recipient@example.com
+      responses:
+        '200':
+          description: Email sent successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Email is send successfully
+        '500':
+          description: Email sending failed
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Email not send
+components:
+  schemas:
+    EmailRequest:
+      type: object
+      required: [message, subject, to]
+      properties:
+        message:
+          type: string
+          description: Email body text
+        subject:
+          type: string
+          description: Email subject line
+        to:
+          type: string
+          format: email
+          description: Recipient email address
